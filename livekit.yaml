@@ -1,0 +1,25 @@
+# Config for the self-hosted, open-source livekit-server (see docker-compose.yml).
+# Docs: https://docs.livekit.io/home/self-hosting/local/
+
+port: 7880
+
+rtc:
+  tcp_port: 7881
+  port_range_start: 50000
+  port_range_end: 50100
+  # For local dev this is fine. If you deploy this on a real server behind
+  # NAT, set use_external_ip: true and make sure the UDP port range above
+  # is actually reachable from the internet.
+  use_external_ip: false
+
+redis:
+  address: redis:6379
+
+keys:
+  # DEV-ONLY placeholder credentials. Generate real ones for anything
+  # beyond your own machine, e.g.:
+  #   docker run --rm livekit/livekit-server generate-keys
+  devkey: devsecret666666666666666666666666
+
+logging:
+  level: info

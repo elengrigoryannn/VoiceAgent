@@ -1,0 +1,34 @@
+# Self-hosted LiveKit server — NOT LiveKit Cloud.
+# Runs the open-source livekit-server + Redis locally via Docker.
+#
+# Usage:
+#   docker compose up -d
+#   docker compose logs -f livekit    # check it started cleanly
+#   docker compose down               # stop it
+#
+# The API key/secret below are DEV-ONLY placeholders (devkey/devsecret666).
+# Change them before exposing this beyond your own machine, and put the
+# same values in your .env file (see .env.example) so voice_agent.py and
+# the web client can authenticate.
+
+services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --save "" --appendonly no
+
+  livekit:
+    image: livekit/livekit-server:latest
+    restart: unless-stopped
+    command: >
+      --config /etc/livekit.yaml
+    volumes:
+      - ./livekit.yaml:/etc/livekit.yaml
+    ports:
+      - "7880:7880"   # HTTP / WebSocket signaling
+      - "7881:7881"   # RTC TCP fallback
+      - "50000-50100:50000-50100/udp"  # WebRTC media (ICE range)
+    depends_on:
+      - redis

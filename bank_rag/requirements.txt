@@ -1,0 +1,9 @@
+chromadb
+google-genai
+requests
+beautifulsoup4
+pyyaml
+python-dotenv
+livekit-agents[silero,google]
+livekit-api
+flask
